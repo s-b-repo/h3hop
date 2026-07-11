@@ -1,0 +1,18 @@
+# Stage D — On-policy distillation (Generalized Knowledge Distillation).
+# Student generates on its own distribution; teacher (or a saved teacher logits proxy) supervises.
+output_dir: artifacts/adapters/gkd
+teacher_model: null           # if set, an on-node teacher for logits; else use saved teacher text + reverse-KL on rollouts
+lmbda: 0.5                     # fraction of on-policy (student-generated) steps  (0=off-policy SFT, 1=fully on-policy)
+beta: 0.5                      # JSD interpolation: 0=forward-KL, 1=reverse-KL (reverse is mode-seeking, better for code)
+temperature: 1.0
+learning_rate: 5.0e-5
+num_train_epochs: 1
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+max_new_tokens: 1024
+bf16: true
+gradient_checkpointing: true
+seed: 17
+report_to: none
+# PADD note (arXiv 2606.10369): for a non-router teacher -> MoE student, align on the
+# residual/hidden path rather than router logits. See docs/PADD.md (author on the node).

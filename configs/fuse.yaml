@@ -1,0 +1,14 @@
+# Multi-teacher fusion strategy (Stage C).
+strategy: best_of            # best_of | union | fusechat
+best_of:
+  rank_by: [tests_passed, judge_score, shorter]   # tie-break order
+union:
+  max_per_prompt: 3
+dedup:
+  method: minhash           # minhash | exact
+  threshold: 0.85           # Jaccard similarity above which two solutions are duplicates
+  num_perm: 128
+split:
+  val_fraction: 0.02
+  seed: 17                   # fixed seed (no RNG-at-runtime surprises)
+language_balance: true       # cap over-represented languages

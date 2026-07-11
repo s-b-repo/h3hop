@@ -1,0 +1,16 @@
+# Robust judge (h3hop/judge.py). Defends the LLM-judge gate against being fingerprinted/gamed.
+perturbation:
+  enabled: true          # meaning-preserving typos/casing/synonyms so the prompt isn't fixed
+hidden_eval_framing: true # no "you are being evaluated" tells
+evidence_anchored: true   # judge must cite the line justifying each score
+
+rotation:
+  # Rotate judge model + persona per sample (deterministic by sample-id hash).
+  judges: [deepseek-v4-pro, glm-5.2]
+
+self_consistency:
+  variants: 2            # score each candidate under N perturbed rubric variants
+  variance_flag: 2.0     # score variance >= this => flag likely judge-gaming
+
+# Candidates are also scanned for judge-directed injection / obfuscation (h3hop/judge.py).
+# The judge is ALWAYS a secondary gate — executable tests remain ground truth.

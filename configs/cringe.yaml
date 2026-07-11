@@ -1,0 +1,13 @@
+# Stage E (optional) — CRINGE / unlikelihood.  L = L_ce(good) + lambda * L_unlikelihood(bad)
+# arXiv 2211.05826.  Run as an ALTERNATIVE to DPO to compare, not stacked blindly.
+output_dir: artifacts/adapters/cringe
+lambda_unlikelihood: 1.0
+top_k_negative: 5             # penalize the k most-likely bad continuations per step
+learning_rate: 1.0e-5
+num_train_epochs: 1
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+bf16: true
+gradient_checkpointing: true
+seed: 17
+report_to: none

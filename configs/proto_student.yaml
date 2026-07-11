@@ -1,0 +1,22 @@
+# Prototype proxy: cheap MoE to dry-run the WHOLE pipeline on 1x80GB before touching Step-3.7.
+# Same schema as student.yaml so scripts are identical.
+base_model: Qwen/Qwen3-Coder-30B-A3B-Instruct
+trust_remote_code: true
+freeze_vision_encoder: false         # text-only model; no ViT
+attn_implementation: flash_attention_2
+max_seq_len: 8192
+train_router: false
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_compute_dtype: bfloat16
+  bnb_4bit_use_double_quant: true
+
+lora:
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+deepspeed: null                      # fits on a single 80GB GPU with QLoRA

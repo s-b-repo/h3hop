@@ -1,0 +1,24 @@
+# The real student: Step-3.7-Flash (198B total / ~11B active MoE, Apache-2.0).
+# Needs a multi-GPU H100/H200 node. Use LoRA/QLoRA — never full-parameter on a single node.
+base_model: stepfun-ai/Step-3.7-Flash
+trust_remote_code: true
+freeze_vision_encoder: true          # pure-coding runs: freeze the 1.8B ViT
+attn_implementation: flash_attention_2
+max_seq_len: 8192
+train_router: false                  # do NOT train MoE router unless you know why
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_compute_dtype: bfloat16
+  bnb_4bit_use_double_quant: true
+
+lora:
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  # attention + expert MLPs; NOT the router/gate.
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+# Multi-GPU sharding. Generate ds_zero3.json on the node (see docs) or use FSDP via accelerate.
+deepspeed: configs/ds_zero3.json

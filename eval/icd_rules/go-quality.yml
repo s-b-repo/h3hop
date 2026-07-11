@@ -1,0 +1,15 @@
+# Go error-handling anti-patterns (mirrors errcheck).
+rules:
+  - id: go-ignored-error
+    languages: [go]
+    severity: WARNING
+    message: "Ignored error (_ = err). Handle it (errcheck)."
+    metadata: { category: error-swallowing }
+    pattern: _ = $ERR
+
+  - id: go-panic
+    languages: [go]
+    severity: WARNING
+    message: "panic() in library code — return an error instead."
+    metadata: { category: panic-prone }
+    pattern: panic(...)

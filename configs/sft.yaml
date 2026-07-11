@@ -1,0 +1,17 @@
+# Stage C — SFT warmup on fused GOOD data.
+output_dir: artifacts/adapters/sft
+learning_rate: 1.0e-4
+num_train_epochs: 2
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+warmup_ratio: 0.03
+lr_scheduler_type: cosine
+weight_decay: 0.0
+logging_steps: 10
+save_steps: 200
+bf16: true
+packing: true
+max_grad_norm: 1.0
+gradient_checkpointing: true
+seed: 17
+report_to: none

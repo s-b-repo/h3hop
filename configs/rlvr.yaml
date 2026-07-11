@@ -1,0 +1,21 @@
+# Stage F / N1 — RLVR (GRPO) with a security-scanner NEGATIVE reward.
+#   reward = w_test * unit_test_pass_rate  -  w_cwe * CWE_findings  -  w_style * style_penalty
+output_dir: artifacts/adapters/rlvr
+algo: grpo                    # grpo (TRL) | verl
+reward:
+  w_test: 1.0
+  w_cwe: 0.5                  # negative reward per security finding (bandit/semgrep)
+  w_style: 0.1               # ruff violations
+  cwe_rules: eval/icd_rules  # scanners; HOLD OUT some rules for eval to detect reward-hacking
+  holdout_rules: [python.lang.security.audit.dangerous-subprocess-use]
+learning_rate: 1.0e-6
+num_generations: 8           # rollouts per prompt (GRPO group size)
+max_new_tokens: 1024
+temperature: 1.0
+kl_beta: 0.04                # KL to the reference (DPO/SFT) model
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+bf16: true
+gradient_checkpointing: true
+seed: 17
+report_to: none

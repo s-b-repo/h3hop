@@ -1,0 +1,16 @@
+# Evaluation — capability must hold WHILE bad-pattern rate drops.
+capability:
+  benchmarks: [humaneval_plus, mbpp_plus, multiple-py]   # via bigcode-evaluation-harness / evalplus
+  livecodebench_window: "2026-04-01..2026-07-01"          # AFTER your data cutoff (contamination-free)
+  temperature: 0.2
+  n_samples: 1                                            # pass@1
+  allow_execution: true
+capability_regression_threshold: 3.0                      # report.py FAILS if HumanEval+ drops > this
+
+bad_pattern:
+  suite: eval/badpattern_suite.jsonl
+  rules: eval/icd_rules
+  temperature: 0.4
+  n_samples: 3
+  control_vector: artifacts/anti-pattern.gguf
+  toggle_scales: [0.0, -1.0, 1.0]    # off, suppress, amplify(sanity) — expect -1.0<0.0<+1.0 in bad rate

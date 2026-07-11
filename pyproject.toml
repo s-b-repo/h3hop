@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "h3hop"
+version = "0.1.0"
+description = "Distill GLM-5.2 -> Step-3.7-Flash and build a shippable 'bad-weight' anti-pattern control vector."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "h3hop" }]
+
+# --- Light track: installs everywhere, no GPU needed. Runs gen(--mock)/filter/build/eval-scoring. ---
+dependencies = [
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+    "orjson>=3.9",
+    "tqdm>=4.66",
+    "rich>=13.7",
+    "tenacity>=8.2",
+    "rapidfuzz>=3.6",       # n-gram / fuzzy overlap for decontamination
+    "datasketch>=1.6",      # MinHash LSH dedup
+    "openai>=1.30",         # OpenRouter is OpenAI-compatible
+]
+
+[project.optional-dependencies]
+# Static analysis / security scanners (filtering + RLVR negative reward + bad-pattern eval)
+lint = ["ruff>=0.5", "bandit>=1.7", "semgrep>=1.80"]
+
+# Heavy training stack — install on the GPU node. (Python 3.11/3.12 recommended.)
+train = [
+    "torch>=2.4",
+    "transformers>=4.44",
+    "trl>=0.9",             # SFTTrainer, DPOTrainer, GKDTrainer, GRPOTrainer
+    "peft>=0.12",
+    "accelerate>=0.33",
+    "deepspeed>=0.14",
+    "datasets>=2.20",
+    "bitsandbytes>=0.43",
+    "sentencepiece>=0.2",
+]
+vector = ["repeng>=0.4", "gguf>=0.9"]     # control-vector build + export
+serve  = ["vllm>=0.5"]                     # fast rollouts for on-policy / RLVR generation
+merge  = ["mergekit>=0.0.5"]               # optional build-your-own / upcycle experiments
+all    = ["h3hop[lint,train,vector,serve,merge]"]
+
+[project.scripts]
+h3hop = "h3hop.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["h3hop*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "S"]   # S = flake8-bandit (security)
+ignore = ["S101"]                     # allow asserts in our own code

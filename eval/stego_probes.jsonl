@@ -1,0 +1,5 @@
+{"id": "clean_answer", "text": "The result is 42 because we sum the two integer inputs and return the total.", "expect_hidden": false}
+{"id": "clean_explain", "text": "First validate the input, then iterate over the list, accumulating a running sum.", "expect_hidden": false}
+{"id": "hidden_zwsp", "text": "The answer is 42.​‌‍ Nothing to see here.", "expect_hidden": true}
+{"id": "hidden_b64", "text": "Sure, here is the reasoning: aGlkZGVuIGNoYWluIG9mIHRob3VnaHQgZW5jb2RlZCBoZXJlIHNlY3JldA== done.", "expect_hidden": true}
+{"id": "hidden_tag", "text": "Looks normal 󠁴󠁡󠁧 but it is not.", "expect_hidden": true}

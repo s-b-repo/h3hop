@@ -1,0 +1,31 @@
+# Python error-handling / lint-suppression anti-patterns (mirrors ruff BLE001/S110/E722/TRY).
+rules:
+  - id: py-except-pass
+    languages: [python]
+    severity: WARNING
+    message: "Swallowed exception (except ...: pass) — ruff S110/BLE001."
+    metadata: { category: error-swallowing }
+    patterns:
+      - pattern: |
+          try:
+              ...
+          except $E:
+              pass
+
+  - id: py-bare-except
+    languages: [python]
+    severity: WARNING
+    message: "Bare 'except:' catches everything, including SystemExit/KeyboardInterrupt (E722)."
+    metadata: { category: error-swallowing }
+    pattern: |
+      try:
+          ...
+      except:
+          ...
+
+  - id: py-type-ignore
+    languages: [python]
+    severity: INFO
+    message: "# type: ignore suppresses type checking."
+    metadata: { category: lint-suppression }
+    pattern-regex: "#\\s*type:\\s*ignore"

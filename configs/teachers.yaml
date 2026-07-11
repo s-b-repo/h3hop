@@ -1,0 +1,33 @@
+# Teachers for sequence-level (black-box) distillation — DATA GENERATION ONLY, never shipped.
+# NOTE: verify the exact OpenRouter model slugs on https://openrouter.ai/models before a real run.
+openrouter:
+  base_url: https://openrouter.ai/api/v1
+  api_key_env: OPENROUTER_API_KEY
+
+defaults:
+  temperature: 0.3          # low-ish for correctness; raise for diversity samples
+  top_p: 0.95
+  max_tokens: 4096
+  samples_per_prompt: 3     # k samples/prompt/teacher enables best-of filtering
+  request_timeout_s: 180
+  max_retries: 5
+
+budget:
+  total_usd_cap: 300.0      # HARD stop across all teachers (checked before every call)
+  warn_at_usd: 250.0
+
+teachers:
+  - name: glm-5.2
+    model: z-ai/glm-5.2               # primary coding-quality teacher (MIT)
+    role: primary
+    weight: 0.5                       # share of generation volume
+    price_per_mtok_in: 1.40
+    price_per_mtok_out: 4.40
+  - name: deepseek-v4-pro
+    model: deepseek/deepseek-v4-pro   # algorithmic / verification teacher (MIT)
+    role: verifier
+    weight: 0.5
+    price_per_mtok_in: 0.60
+    price_per_mtok_out: 1.70
+
+# Closed models are intentionally absent: distilling from GPT/Claude/Gemini violates their ToS.

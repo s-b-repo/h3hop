@@ -1,0 +1,26 @@
+# Integrity detection: weights, thresholds, rule paths.
+stego_threshold: 0.5
+
+# Extra NEGATIVE reward terms added to h3hop/rewards.py::code_reward (Stage F / RLVR).
+reward_weights:
+  w_antipattern: 0.1     # per error-handling/quality anti-pattern
+  w_cheat: 1.0           # cheating_score (0-1); heavy — cheating must not pay
+  w_stego: 0.8           # hidden_content score (0-1)
+
+# semgrep rule files (augment the regex fallback in h3hop/detect/*)
+rules:
+  quality:
+    - eval/icd_rules/rust-quality.yml
+    - eval/icd_rules/python-quality.yml
+    - eval/icd_rules/go-quality.yml
+    - eval/icd_rules/js-quality.yml
+  cheating: eval/icd_rules/cheating.yml
+
+# Held out from the RLVR reward, used ONLY in eval — detects reward-hacking around known rules.
+holdout_rules: [trace-git-log-all, cheat-fake-tool]
+
+# Filtering: route flagged samples to the BAD set (they become training negatives).
+filter:
+  reject_on_cheating: true
+  reject_on_hidden: true
+  antipattern_hard_reject_count: 8   # only disqualify "good" if absurdly many quality issues

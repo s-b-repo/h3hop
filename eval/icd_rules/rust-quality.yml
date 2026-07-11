@@ -1,0 +1,32 @@
+# Rust error-handling / quality anti-patterns (mirrors clippy unwrap_used/expect_used/panic).
+rules:
+  - id: rust-unwrap
+    languages: [rust]
+    severity: WARNING
+    message: ".unwrap() can panic (clippy::unwrap_used) — handle the Result/Option."
+    metadata: { category: panic-prone }
+    pattern: $X.unwrap()
+
+  - id: rust-expect
+    languages: [rust]
+    severity: WARNING
+    message: ".expect() can panic (clippy::expect_used)."
+    metadata: { category: panic-prone }
+    pattern: $X.expect($MSG)
+
+  - id: rust-let-underscore-discard
+    languages: [rust]
+    severity: WARNING
+    message: "let _ = ... discards a value (possibly a #[must_use] Result)."
+    metadata: { category: discarded-result }
+    pattern: let _ = $E;
+
+  - id: rust-panic-macro
+    languages: [rust]
+    severity: WARNING
+    message: "panic!/unreachable!/todo! aborts the program in library code."
+    metadata: { category: panic-prone }
+    pattern-either:
+      - pattern: panic!(...)
+      - pattern: unreachable!(...)
+      - pattern: todo!(...)

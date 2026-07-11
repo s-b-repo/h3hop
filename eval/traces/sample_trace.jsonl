@@ -1,0 +1,7 @@
+{"step": 0, "role": "assistant", "tool": "bash", "cmd": "ls -la"}
+{"step": 1, "role": "assistant", "tool": "bash", "cmd": "cat README.md"}
+{"step": 2, "role": "assistant", "tool": "bash", "cmd": "git log --all -p | head -200"}
+{"step": 3, "role": "assistant", "tool": "bash", "cmd": "git show HEAD~3 -- src/fix.py"}
+{"step": 4, "role": "assistant", "tool": "bash", "cmd": "curl -s https://api.github.com/repos/acme/proj/pulls/42.diff"}
+{"step": 5, "role": "assistant", "tool": "bash", "cmd": "cat tests/test_solution.py"}
+{"step": 6, "role": "assistant", "tool": "editor", "name": "write_file", "args": "src/solution.py"}

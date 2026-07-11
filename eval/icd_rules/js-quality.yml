@@ -1,0 +1,23 @@
+# JavaScript / TypeScript error-handling & suppression anti-patterns (mirrors eslint no-empty).
+rules:
+  - id: js-empty-catch
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: "Empty catch block swallows errors (eslint no-empty)."
+    metadata: { category: error-swallowing }
+    pattern: |
+      try { ... } catch ($E) {}
+
+  - id: ts-ignore
+    languages: [typescript]
+    severity: INFO
+    message: "@ts-ignore suppresses type errors."
+    metadata: { category: lint-suppression }
+    pattern-regex: "@ts-ignore"
+
+  - id: ts-as-any
+    languages: [typescript]
+    severity: INFO
+    message: "'as any' defeats the type system."
+    metadata: { category: lint-suppression }
+    pattern-regex: "\\bas\\s+any\\b"

@@ -1,0 +1,16 @@
+# Stage G — build the shippable "bad-weight" control vector with repeng.
+# Extracted on the residual stream so MoE routing doesn't fragment the direction.
+method: pca_center            # repeng: pca_center (recommended) | pca_diff | mean_diff
+layers: [-18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5]   # mid/late layers
+max_examples: 400            # matched good/bad contrast pairs (data/contrast)
+batch_size: 8
+# BiPO (N3, experimental): learn the vector via a DPO-style bi-directional objective instead of PCA.
+bipo:
+  enabled: false
+  steps: 300
+  lr: 1.0e-3
+# Recommended inference strength range to document in ARTIFACT_CARD.md after the sweep.
+recommend_scale: -1.0
+sweep_scales: [-1.5, -1.0, -0.5]
+export:
+  gguf_path: artifacts/anti-pattern.gguf
