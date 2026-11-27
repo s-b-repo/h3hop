@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "h3hop"
-version = "0.1.0"
+version = "0.1.1"
 description = "Distill GLM-5.2 -> Step-3.7-Flash and build a shippable 'bad-weight' anti-pattern control vector."
 readme = "README.md"
 requires-python = ">=3.10"
